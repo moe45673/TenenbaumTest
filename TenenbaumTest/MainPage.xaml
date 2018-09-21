@@ -1,0 +1,30 @@
+﻿<Page
+    x:Class="TenenbaumTest.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="using:TenenbaumTest.Converter"
+    xmlns:local="using:TenenbaumTest"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Page.DataContext>
+        <local:MainPageViewModel/>
+    </Page.DataContext>
+    <Page.Resources>
+        <converters:FileToImageConverter x:Key="FileToImageConverter"/>
+    </Page.Resources>
+        <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <CommandBar >
+            <AppBarButton Content="Open Image" Click="{x:Bind OpenImage}"/>
+        </CommandBar>
+        <!--<Canvas Grid.Row="1">-->
+            <Image Grid.Row="1" Source="{Binding Img.ImageFile, UpdateSourceTrigger=PropertyChanged, Mode=OneWay, Converter={StaticResource FileToImageConverter}}"/>
+        <!--</Canvas>-->
+    </Grid>
+</Page>
