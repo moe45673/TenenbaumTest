@@ -14,7 +14,8 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 using Windows.Storage.FileProperties;
-
+using Windows.UI.Xaml.Media.Imaging;
+using XamlBrewer.Uwp.Controls;
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
 namespace TenenbaumTest
@@ -27,9 +28,10 @@ namespace TenenbaumTest
         public MainPage()
         {
             this.InitializeComponent();
+
         }
 
-        private async void OpenImage()
+        private async void OpenImage(object sender, RoutedEventArgs eventArgs)
         {
             var picker = new Windows.Storage.Pickers.FileOpenPicker();
             picker.ViewMode = Windows.Storage.Pickers.PickerViewMode.Thumbnail;
@@ -43,11 +45,14 @@ namespace TenenbaumTest
             if (file != null)
             {
                 // Application now has read/write access to the picked file
-                var properties = await file.Properties.GetImagePropertiesAsync();
-
-                ((MainPageViewModel)DataContext).Img = new ImageModel(properties, file, file.DisplayName, file.DisplayType);
+                var wb = new WriteableBitmap(1, 1);
+                    await wb.LoadAsync(file);
+                    ((MainPageViewModel)DataContext).Img = wb;
+                    
+                
+                
             }
-            
+
         }
     }
 }

@@ -13,12 +13,12 @@ namespace TenenbaumTest.Converter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            var image = new BitmapImage();
+            var image = new WriteableBitmap(1, 1);
             SetImage(image, value as StorageFile);
             return image;
         }
 
-        async void SetImage(BitmapImage image, StorageFile file)
+        async void SetImage(BitmapSource image, StorageFile file)
         {
             if (file == null)
                 return;

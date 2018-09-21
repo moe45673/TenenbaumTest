@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TenenbaumTest.BoilerPlate;
+using Windows.UI.Xaml.Media.Imaging;
 
 namespace TenenbaumTest
 {
@@ -11,22 +12,22 @@ namespace TenenbaumTest
     {
         
 
-        private ImageModel _img;
+        private WriteableBitmap _img;
 
-        public ImageModel Img
+        public WriteableBitmap Img
         {
             get { return _img; }
             set { SetProperty(ref _img , value); }
         }
 
-        public MainPageViewModel()
+        public MainPageViewModel() : this(default(WriteableBitmap))
         {
-            Img = new ImageModel();
+            
         }
 
-        public MainPageViewModel(ImageModel model)
+        public MainPageViewModel(WriteableBitmap model)
         {
-            Img = model;
+            Img = model ?? new WriteableBitmap(1, 1); //Should use Dependency Injection
         }
 
 
