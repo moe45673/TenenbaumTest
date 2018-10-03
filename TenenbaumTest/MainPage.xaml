@@ -8,7 +8,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="using:XamlBrewer.Uwp.Controls"
     mc:Ignorable="d"
-    
+    Loaded="Page_Loaded"
     >
     <Page.DataContext>
         <local:MainPageViewModel/>
@@ -133,8 +133,10 @@
             VerticalAlignment="Stretch"
             HorizontalAlignment="Stretch"
             Margin="0 8 4 0" 
-            SourceImage="{Binding Img, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Converter={StaticResource FileToImageConverter}}"
+            SourceImage="{x:Bind ViewModel.Img, Mode=OneWay}"
             />
-        
+
+        <!--, Converter={StaticResource FileToImageConverter}-->
+
     </Grid>
 </Page>

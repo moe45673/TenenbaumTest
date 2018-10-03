@@ -29,30 +29,51 @@ namespace TenenbaumTest
         {
             this.InitializeComponent();
 
-        }
-
-        private async void OpenImage(object sender, RoutedEventArgs eventArgs)
-        {
-            var picker = new Windows.Storage.Pickers.FileOpenPicker();
-            picker.ViewMode = Windows.Storage.Pickers.PickerViewMode.Thumbnail;
-            picker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.PicturesLibrary;
-            picker.FileTypeFilter.Add(".jpg");
-            picker.FileTypeFilter.Add(".jpeg");
-            picker.FileTypeFilter.Add(".png");
-            picker.FileTypeFilter.Add(".bmp");
-
-            Windows.Storage.StorageFile file = await picker.PickSingleFileAsync();
-            if (file != null)
+            DataContextChanged += (s, e) =>
             {
-                // Application now has read/write access to the picked file
-                var wb = new WriteableBitmap(1, 1);
-                    await wb.LoadAsync(file);
-                    ((MainPageViewModel)DataContext).Img = wb;
-                    
-                
-                
-            }
+                ViewModel = DataContext as MainPageViewModel;
+            };
+
+            
+        }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            ImageCropper.SelectedRegion.PropertyChanged += SelectedRegion_PropertyChanged;
+        }
+
+        private void SelectedRegion_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            //ImageCropper.SelectedRegion.SelectedRect.Height = ImageCropper.SelectedRegion.SelectedRect.Height > ViewModel.MaxCropHeight ? ViewModel.MaxCropHeight : ImageCropper.SelectedRegion.SelectedRect.Height;
+        }
+
+        public MainPageViewModel ViewModel { get; set; }
+    
+
+    private async void OpenImage(object sender, RoutedEventArgs eventArgs)
+    {
+        var picker = new Windows.Storage.Pickers.FileOpenPicker();
+        picker.ViewMode = Windows.Storage.Pickers.PickerViewMode.Thumbnail;
+        picker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.PicturesLibrary;
+        picker.FileTypeFilter.Add(".jpg");
+        picker.FileTypeFilter.Add(".jpeg");
+        picker.FileTypeFilter.Add(".png");
+        picker.FileTypeFilter.Add(".bmp");
+
+        Windows.Storage.StorageFile file = await picker.PickSingleFileAsync();
+        if (file != null)
+        {
+            // Application now has read/write access to the picked file
+            var wb = new WriteableBitmap(1, 1);
+            await wb.LoadAsync(file);
+            ViewModel.Img = wb;
+
+
 
         }
+
+    }
+
+        
     }
 }
