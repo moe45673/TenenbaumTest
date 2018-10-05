@@ -2,27 +2,27 @@
  * Module Name:  CropBitmap.cs
  * Project:      CSWindowsStoreAppCropBitmap
  * Copyright (c) Microsoft Corporation.
- * 
+ *
  * This class is used to get and save cropped image.
- * 
+ *
  * To crop a bitmap, we can follow these steps:
- * 
+ *
  * 1. Read the original image to a IRandomAccessStream
  * 2. Create a decoder from the stream. With the decoder, we can get the
  *    properties of the image.
  * 3. Use BitmapTransform to define the region to crop, and then get the pixel
  *    data in the region.
- *    If we also want to scale the image, we can set the ScaledWidth and 
+ *    If we also want to scale the image, we can set the ScaledWidth and
  *    ScaledHeight properties of the BitmapTransform.
  * 4. To get a cropped bitmap directly, we write the pixel data to a WriteableBitmap.
  *    To save the cropped bitmap to a local file, we can use BitmapEncoder.
- *  
+ *
  * This source is subject to the Microsoft Public License.
  * See http://www.microsoft.com/en-us/openness/licenses.aspx#MPL
  * All other rights reserved.
- * 
- * THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, 
- * EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE IMPLIED 
+ *
+ * THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND,
+ * EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR PURPOSE.
 \***************************************************************************/
 
@@ -36,7 +36,6 @@ namespace XamlBrewer.Uwp.Controls.Helpers
     using Windows.Graphics.Imaging;
     using Windows.Storage;
     using Windows.Storage.Streams;
-    using Windows.UI.Xaml.Media;
     using Windows.UI.Xaml.Media.Imaging;
 
     public class CropBitmap
@@ -72,8 +71,7 @@ namespace XamlBrewer.Uwp.Controls.Helpers
 
             using (IRandomAccessStream stream = await originalImageFile.OpenReadAsync())
             {
-
-                // Create a decoder from the stream. With the decoder, we can get 
+                // Create a decoder from the stream. With the decoder, we can get
                 // the properties of the image.
                 BitmapDecoder decoder = await BitmapDecoder.CreateAsync(stream);
 
@@ -81,8 +79,7 @@ namespace XamlBrewer.Uwp.Controls.Helpers
                 uint scaledWidth = (uint)Math.Floor(decoder.PixelWidth * scale);
                 uint scaledHeight = (uint)Math.Floor(decoder.PixelHeight * scale);
 
-
-                // Refine the start point and the size. 
+                // Refine the start point and the size.
                 if (startPointX + width > scaledWidth)
                 {
                     startPointX = scaledWidth - width;

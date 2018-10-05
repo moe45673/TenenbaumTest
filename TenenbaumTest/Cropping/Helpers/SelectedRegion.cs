@@ -2,28 +2,27 @@
  * Module Name:  SelectedRegion.cs
  * Project:      CSWindowsStoreAppCropBitmap
  * Copyright (c) Microsoft Corporation.
- * 
+ *
  * This class represents the selected region. It implements the INotifyPropertyChanged
  * interface and can be bound to the Xaml element
- *  
- * 
+ *
+ *
  * This source is subject to the Microsoft Public License.
  * See http://www.microsoft.com/en-us/openness/licenses.aspx#MPL
  * All other rights reserved.
- * 
- * THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, 
- * EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE IMPLIED 
+ *
+ * THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND,
+ * EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR PURPOSE.
 \***************************************************************************/
 
 namespace XamlBrewer.Uwp.Controls.Helpers
 {
     using System;
-    using System.ComponentModel;
-    using System.Linq;
+    using TenenbaumTest.BoilerPlate;
     using Windows.Foundation;
 
-    public class SelectedRegion : INotifyPropertyChanged
+    public class SelectedRegion : BindableBase
     {
         private const string TopLeftCornerCanvasLeftPropertyName = "TopLeftCornerCanvasLeft";
         private const string TopLeftCornerCanvasTopPropertyName = "TopLeftCornerCanvasTop";
@@ -37,12 +36,19 @@ namespace XamlBrewer.Uwp.Controls.Helpers
         public const string BottomLeftCornerName = "BottomLeftCorner";
         public const string BottomRightCornerName = "BottomRightCorner";
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        ///// <summary>
+        ///// The minimum size of the selected region
+        ///// </summary>
 
-        /// <summary>
-        /// The minimum size of the selected region
-        /// </summary>
-        public double MinSelectRegionSize { get; set; }
+        protected const double minWidthSize = 2;
+        protected const double minHeightSize = 2;
+
+
+
+
+       
+
+
 
         private double topLeftCornerCanvasLeft;
 
@@ -51,15 +57,8 @@ namespace XamlBrewer.Uwp.Controls.Helpers
         /// </summary>
         public double TopLeftCornerCanvasLeft
         {
-            get { return topLeftCornerCanvasLeft; }
-            protected set
-            {
-                if (topLeftCornerCanvasLeft != value)
-                {
-                    topLeftCornerCanvasLeft = value;
-                    this.OnPropertyChanged(TopLeftCornerCanvasLeftPropertyName);
-                }
-            }
+            get => topLeftCornerCanvasLeft;
+            protected set => SetProperty(ref topLeftCornerCanvasLeft, value);
         }
 
         private double topLeftCornerCanvasTop;
@@ -69,15 +68,8 @@ namespace XamlBrewer.Uwp.Controls.Helpers
         /// </summary>
         public double TopLeftCornerCanvasTop
         {
-            get { return topLeftCornerCanvasTop; }
-            protected set
-            {
-                if (topLeftCornerCanvasTop != value)
-                {
-                    topLeftCornerCanvasTop = value;
-                    this.OnPropertyChanged(TopLeftCornerCanvasTopPropertyName);
-                }
-            }
+            get => topLeftCornerCanvasTop;
+            protected set => SetProperty(ref topLeftCornerCanvasTop, value);
         }
 
         private double bottomRightCornerCanvasLeft;
@@ -87,16 +79,8 @@ namespace XamlBrewer.Uwp.Controls.Helpers
         /// </summary>
         public double BottomRightCornerCanvasLeft
         {
-            get { return bottomRightCornerCanvasLeft; }
-            protected set
-            {
-                if (bottomRightCornerCanvasLeft != value)
-                {
-                    bottomRightCornerCanvasLeft = value;
-
-                    this.OnPropertyChanged(BottomRightCornerCanvasLeftPropertyName);
-                }
-            }
+            get => bottomRightCornerCanvasLeft;
+            protected set => SetProperty(ref bottomRightCornerCanvasLeft, value);
         }
 
         private double bottomRightCornerCanvasTop;
@@ -106,35 +90,20 @@ namespace XamlBrewer.Uwp.Controls.Helpers
         /// </summary>
         public double BottomRightCornerCanvasTop
         {
-            get { return bottomRightCornerCanvasTop; }
-            protected set
-            {
-                if (bottomRightCornerCanvasTop != value)
-                {
-                    bottomRightCornerCanvasTop = value;
-                    this.OnPropertyChanged(BottomRightCornerCanvasTopPropertyName);
-                }
-            }
+            get => bottomRightCornerCanvasTop;
+            protected set => SetProperty(ref bottomRightCornerCanvasTop, value);
         }
 
         private Rect outerRect;
 
         /// <summary>
-        /// The outer rect. The non-selected region can be represented by the 
+        /// The outer rect. The non-selected region can be represented by the
         /// OuterRect and the SelectedRect.
         /// </summary>
         public Rect OuterRect
         {
-            get { return outerRect; }
-            set
-            {
-                if (outerRect != value)
-                {
-                    outerRect = value;
-
-                    this.OnPropertyChanged(OutterRectPropertyName);
-                }
-            }
+            get => outerRect;
+             set => SetProperty(ref outerRect, value);
         }
 
         private Rect selectedRect;
@@ -144,24 +113,13 @@ namespace XamlBrewer.Uwp.Controls.Helpers
         /// </summary>
         public Rect SelectedRect
         {
-            get { return selectedRect; }
-            protected set
-            {
-                if (selectedRect != value)
-                {
-                    selectedRect = value;
-
-                    this.OnPropertyChanged(SelectedRectPropertyName);
-                }
-            }
+            get => selectedRect;
+            set => SetProperty(ref selectedRect, value);
         }
 
-        protected virtual void OnPropertyChanged(string propertyName)
+        protected override void RaisePropertyChanged(string propertyName)
         {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
+            base.RaisePropertyChanged(propertyName);
 
             // When the corner is moved, update the SelectedRect.
             if (propertyName == TopLeftCornerCanvasLeftPropertyName ||
@@ -177,7 +135,6 @@ namespace XamlBrewer.Uwp.Controls.Helpers
             }
         }
 
-
         public void ResetCorner(double topLeftCornerCanvasLeft, double topLeftCornerCanvasTop,
             double bottomRightCornerCanvasLeft, double bottomRightCornerCanvasTop)
         {
@@ -187,18 +144,18 @@ namespace XamlBrewer.Uwp.Controls.Helpers
             this.BottomRightCornerCanvasTop = bottomRightCornerCanvasTop;
         }
 
-        /// <summary>
-        /// Update the Canvas.Top and Canvas.Left of the corner.
-        /// </summary>
-        public void UpdateCorner(string cornerName, double leftUpdate, double topUpdate)
-        {
-            UpdateCorner(cornerName, leftUpdate, topUpdate, this.MinSelectRegionSize, this.MinSelectRegionSize);
-        }
+        ///// <summary>
+        ///// Update the Canvas.Top and Canvas.Left of the corner.
+        ///// </summary>
+        //public void UpdateCorner(string cornerName, double leftUpdate, double topUpdate)
+        //{
+        //    UpdateCorner(cornerName, leftUpdate, topUpdate);
+        //}
 
         /// <summary>
         /// Update the Canvas.Top and Canvas.Left of the corner.
         /// </summary>
-        public void UpdateCorner(string cornerName, double leftUpdate, double topUpdate, double minWidthSize, double minHeightSize, double maxWidthSize = Double.MaxValue, double maxHeightSize = Double.MaxValue)
+        public void UpdateCorner(string cornerName, double leftUpdate, double topUpdate)
         {
             switch (cornerName)
             {
@@ -208,28 +165,31 @@ namespace XamlBrewer.Uwp.Controls.Helpers
                     TopLeftCornerCanvasTop = ValidateValue(topLeftCornerCanvasTop + topUpdate,
                         0, bottomRightCornerCanvasTop - minHeightSize);
                     break;
+
                 case SelectedRegion.TopRightCornerName:
                     BottomRightCornerCanvasLeft = ValidateValue(bottomRightCornerCanvasLeft + leftUpdate,
                         topLeftCornerCanvasLeft + minWidthSize, outerRect.Width);
                     TopLeftCornerCanvasTop = ValidateValue(topLeftCornerCanvasTop + topUpdate,
                         0, bottomRightCornerCanvasTop - minHeightSize);
                     break;
+
                 case SelectedRegion.BottomLeftCornerName:
                     TopLeftCornerCanvasLeft = ValidateValue(topLeftCornerCanvasLeft + leftUpdate,
                         0, bottomRightCornerCanvasLeft - minWidthSize);
                     BottomRightCornerCanvasTop = ValidateValue(bottomRightCornerCanvasTop + topUpdate,
                         topLeftCornerCanvasTop + minHeightSize, outerRect.Height);
                     break;
+
                 case SelectedRegion.BottomRightCornerName:
                     BottomRightCornerCanvasLeft = ValidateValue(bottomRightCornerCanvasLeft + leftUpdate,
                         topLeftCornerCanvasLeft + minWidthSize, outerRect.Width);
                     BottomRightCornerCanvasTop = ValidateValue(bottomRightCornerCanvasTop + topUpdate,
                         topLeftCornerCanvasTop + minHeightSize, outerRect.Height);
                     break;
+
                 default:
                     throw new ArgumentException("cornerName: " + cornerName + "  is not recognized.");
             }
-
         }
 
         private double ValidateValue(double tempValue, double from, double to)
@@ -262,47 +222,47 @@ namespace XamlBrewer.Uwp.Controls.Helpers
 
                 if (scale > 1)
                 {
-                    this.UpdateCorner(SelectedRegion.BottomRightCornerName, scaledLeftUpdate, scaledTopUpdate);
-                    this.UpdateCorner(SelectedRegion.TopLeftCornerName, -scaledLeftUpdate, -scaledTopUpdate);
+                    UpdateCorner(SelectedRegion.BottomRightCornerName, scaledLeftUpdate, scaledTopUpdate);
+                    UpdateCorner(SelectedRegion.TopLeftCornerName, -scaledLeftUpdate, -scaledTopUpdate);
                 }
                 else
                 {
-                    this.UpdateCorner(SelectedRegion.TopLeftCornerName, -scaledLeftUpdate, -scaledTopUpdate);
-                    this.UpdateCorner(SelectedRegion.BottomRightCornerName, scaledLeftUpdate, scaledTopUpdate);
+                    UpdateCorner(SelectedRegion.TopLeftCornerName, -scaledLeftUpdate, -scaledTopUpdate);
+                    UpdateCorner(SelectedRegion.BottomRightCornerName, scaledLeftUpdate, scaledTopUpdate);
                 }
 
                 return;
             }
 
-            double minWidth = Math.Max(this.MinSelectRegionSize, width * scale);
-            double minHeight = Math.Max(this.MinSelectRegionSize, height * scale);
+            double minWidth = Math.Max(minWidthSize, width * scale);
+            double minHeight = Math.Max(minHeightSize, height * scale);
 
             // Move towards BottomRight: Move BottomRightCorner first, and then move TopLeftCorner.
             if (leftUpdate >= 0 && topUpdate >= 0)
             {
-                this.UpdateCorner(SelectedRegion.BottomRightCornerName, leftUpdate, topUpdate, minWidth, minHeight);
-                this.UpdateCorner(SelectedRegion.TopLeftCornerName, leftUpdate, topUpdate, minWidth, minHeight);
+                this.UpdateCorner(SelectedRegion.BottomRightCornerName, leftUpdate, topUpdate);
+                this.UpdateCorner(SelectedRegion.TopLeftCornerName, leftUpdate, topUpdate);
             }
 
             // Move towards TopRight: Move TopRightCorner first, and then move BottomLeftCorner.
             else if (leftUpdate >= 0 && topUpdate < 0)
             {
-                this.UpdateCorner(SelectedRegion.TopRightCornerName, leftUpdate, topUpdate, minWidth, minHeight);
-                this.UpdateCorner(SelectedRegion.BottomLeftCornerName, leftUpdate, topUpdate, minWidth, minHeight);
+                this.UpdateCorner(SelectedRegion.TopRightCornerName, leftUpdate, topUpdate);
+                this.UpdateCorner(SelectedRegion.BottomLeftCornerName, leftUpdate, topUpdate);
             }
 
             // Move towards BottomLeft: Move BottomLeftCorner first, and then move TopRightCorner.
             else if (leftUpdate < 0 && topUpdate >= 0)
             {
-                this.UpdateCorner(SelectedRegion.BottomLeftCornerName, leftUpdate, topUpdate, minWidth, minHeight);
-                this.UpdateCorner(SelectedRegion.TopRightCornerName, leftUpdate, topUpdate, minWidth, minHeight);
+                this.UpdateCorner(SelectedRegion.BottomLeftCornerName, leftUpdate, topUpdate);
+                this.UpdateCorner(SelectedRegion.TopRightCornerName, leftUpdate, topUpdate);
             }
 
             // Move towards TopLeft: Move TopLeftCorner first, and then move BottomRightCorner.
             else if (leftUpdate < 0 && topUpdate < 0)
             {
-                this.UpdateCorner(SelectedRegion.TopLeftCornerName, leftUpdate, topUpdate, minWidth, minHeight);
-                this.UpdateCorner(SelectedRegion.BottomRightCornerName, leftUpdate, topUpdate, minWidth, minHeight);
+                this.UpdateCorner(SelectedRegion.TopLeftCornerName, leftUpdate, topUpdate);
+                this.UpdateCorner(SelectedRegion.BottomRightCornerName, leftUpdate, topUpdate);
             }
         }
     }

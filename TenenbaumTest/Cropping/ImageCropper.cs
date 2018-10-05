@@ -3,9 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
-    using System.Diagnostics;
     using System.Threading.Tasks;
-    using XamlBrewer.Uwp.Controls.Helpers;
     using Windows.Foundation;
     using Windows.Graphics.Imaging;
     using Windows.Storage;
@@ -15,6 +13,7 @@
     using Windows.UI.Xaml.Input;
     using Windows.UI.Xaml.Media.Imaging;
     using Windows.UI.Xaml.Shapes;
+    using XamlBrewer.Uwp.Controls.Helpers;
 
     /// <summary>
     /// Image Control with Cropper.
@@ -30,6 +29,7 @@
     public sealed class ImageCropper : Control, INotifyPropertyChanged
     {
         #region Constants
+
         private const string SelectRegionPartName = "PART_SelectRegion";
 
         private const string TopLeftCornerPartName = "PART_TopLeftCorner";
@@ -42,7 +42,8 @@
         private const string LayoutRootPartName = "PART_LayoutRoot";
         private const string ImageCanvasPartName = "PART_ImageCanvas";
         private const string SourceImagePartName = "PART_SourceImage";
-        #endregion
+
+        #endregion Constants
 
         #region Fields
 
@@ -65,7 +66,7 @@
 
         private WriteableBitmap croppedImage;
 
-        #endregion
+        #endregion Fields
 
         #region Dependency Properties
 
@@ -92,12 +93,9 @@
             await that.LoadImage(file);
         }
 
-        #endregion
+        #endregion Dependency Properties
 
         public event PropertyChangedEventHandler PropertyChanged;
-
-
-
 
         public SelectedRegion SelectedRegion
         {
@@ -107,7 +105,6 @@
                 this.selectedRegion = value;
 
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedRegion)));
-
             }
         }
 
@@ -190,7 +187,7 @@
 
             this.selectRegion = this.GetTemplateChild(SelectRegionPartName) as Path;
             this.selectRegion.ManipulationMode = ManipulationModes.Scale | ManipulationModes.TranslateX | ManipulationModes.TranslateY;
-            SelectedRegion = new SelectedRegion { MinSelectRegionSize = 2 * CornerSize };
+            SelectedRegion = new SelectedRegion();
 
             this.DataContext = selectedRegion;
 
@@ -213,7 +210,6 @@
             this.selectRegion.ManipulationCompleted += SelectRegion_ManipulationCompleted;
 
             this.sourceImage.SizeChanged += SourceImage_SizeChanged;
-            
         }
 
         private void AddCornerEvents(Control corner)
@@ -284,7 +280,7 @@
 
             (sender as UIElement).ReleasePointerCapture(e.Pointer);
 
-            this.UpdatePreviewImage();
+            //this.UpdatePreviewImage();
             e.Handled = true;
         }
 
@@ -345,13 +341,13 @@
         {
             if (e.NewSize.IsEmpty || double.IsNaN(e.NewSize.Height) || e.NewSize.Height <= 0)
             {
-                this.imageCanvas.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                this.imageCanvas.Visibility = Visibility.Collapsed;
                 this.selectedRegion.OuterRect = Rect.Empty;
                 this.selectedRegion.ResetCorner(0, 0, 0, 0);
             }
             else
             {
-                this.imageCanvas.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                this.imageCanvas.Visibility = Visibility.Visible;
 
                 this.imageCanvas.Height = e.NewSize.Height;
                 this.imageCanvas.Width = e.NewSize.Width;

@@ -12,13 +12,11 @@
 //    {
 //        public event PropertyChangedEventHandler PropertyChanged;
 
-
-
 //        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
 //        {
 //            var handler = PropertyChanged;
 //            if(handler != null)
-//            { 
+//            {
 //                handler(this, new PropertyChangedEventArgs(propertyName));
 //            }
 //        }
@@ -42,7 +40,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 
 namespace TenenbaumTest.BoilerPlate
@@ -111,27 +108,13 @@ namespace TenenbaumTest.BoilerPlate
         /// <param name="propertyName">Name of the property used to notify listeners. This
         /// value is optional and can be provided automatically when invoked from compilers
         /// that support <see cref="CallerMemberNameAttribute"/>.</param>
-        protected void RaisePropertyChanged([CallerMemberName]string propertyName = null)
-        {
-            //TODO: when we remove the old OnPropertyChanged method we need to uncomment the below line
-            //OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
-#pragma warning disable CS0618 // Type or member is obsolete
-            OnPropertyChanged(propertyName);
-#pragma warning restore CS0618 // Type or member is obsolete
-        }
-
-        /// <summary>
-        /// Notifies listeners that a property value has changed.
-        /// </summary>
-        /// <param name="propertyName">Name of the property used to notify listeners. This
-        /// value is optional and can be provided automatically when invoked from compilers
-        /// that support <see cref="CallerMemberNameAttribute"/>.</param>
-        [Obsolete("Please use the new RaisePropertyChanged method. This method will be removed to comply wth .NET coding standards. If you are overriding this method, you should overide the OnPropertyChanged(PropertyChangedEventArgs args) signature instead.")]
-        [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-        protected virtual void OnPropertyChanged([CallerMemberName]string propertyName = null)
+        protected virtual void RaisePropertyChanged([CallerMemberName]string propertyName = null)
         {
             OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
+
+            
         }
+        
 
         /// <summary>
         /// Raises this object's PropertyChanged event.

@@ -11,13 +11,13 @@ namespace TenenbaumTest
 {
     public class MainPageViewModel : BindableBase
     {
-
+        private const int maxCropHeight = 100;
 
         private bool _isCropping;
 
         public bool IsCropping
         {
-            get { return this._isCropping; }
+            get { return _isCropping; }
             set { SetProperty(ref _isCropping, value); }
         }
 
@@ -29,9 +29,15 @@ namespace TenenbaumTest
             set { SetProperty(ref _img , value); }
         }
 
+        private WriteableBitmap _croppedImg;
+
+        public WriteableBitmap CroppedImg
+        {
+            get { return _croppedImg ?? new WriteableBitmap(2, 2); }
+            set { SetProperty(ref _croppedImg, value); }
+        }
 
         private int _maxCropHeight;
-
         public int MaxCropHeight
         {
             get { return this._maxCropHeight; }
@@ -46,7 +52,8 @@ namespace TenenbaumTest
         public MainPageViewModel(WriteableBitmap model = default(WriteableBitmap))
         {
             Img = model; //Should use Dependency Injection
-
+            IsCropping = true;
+            MaxCropHeight = maxCropHeight;
         }
 
 

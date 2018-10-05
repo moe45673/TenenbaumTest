@@ -97,10 +97,11 @@
     </Compile>
     <Compile Include="BoilerPlate\DelegateCommand.cs" />
     <Compile Include="BoilerPlate\BindableBase.cs" />
-    <Compile Include="BoilerPlate\Helpers\CropBitmap.cs" />
-    <Compile Include="BoilerPlate\Helpers\SelectedRegion.cs" />
-    <Compile Include="BoilerPlate\Helpers\WriteableBitmapExtensions.cs" />
-    <Compile Include="BoilerPlate\ImageCropper.cs" />
+    <Compile Include="Converter\BoolToColorConverter.cs" />
+    <Compile Include="Cropping\Helpers\CropBitmap.cs" />
+    <Compile Include="Cropping\Helpers\SelectedRegion.cs" />
+    <Compile Include="Cropping\Helpers\WriteableBitmapExtensions.cs" />
+    <Compile Include="Cropping\ImageCropper.cs" />
     <Compile Include="Converter\FileToImageConverter.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
@@ -136,6 +137,9 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.1.7</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Toolkit.Uwp.UI">
+      <Version>4.0.0</Version>
     </PackageReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
